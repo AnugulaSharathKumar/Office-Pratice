@@ -1,65 +1,79 @@
 #!/bin/bash
+set -euo pipefail
 
-# ================================
-# GCP Inventory Script
-# ================================
-# Collects:
-# 1. Compute Engine VM details
-# 2. Cloud Storage bucket details
-# 3. IAM roles and bindings
-# ================================
+# =====================================================
+# GCP Inventory Collection Script
+# =====================================================
+# Project  : project-3e800f45-77e7-454a-a2b
+# Purpose  : Collect inventory details for
+#            1. Compute Engine VMs
+#            2. Cloud Storage Buckets
+#            3. IAM Roles & Policies
+# =====================================================
 
-PROJECT_ID=$(gcloud config get-value project)
+# -----------------------------
+# Project Configuration
+# -----------------------------
+PROJECT_ID="project-3e800f45-77e7-454a-a2b"
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")
-OUTPUT_DIR="gcp_inventory_$DATE"
+OUTPUT_DIR="gcp_inventory_${PROJECT_ID}_${DATE}"
 
-mkdir -p $OUTPUT_DIR
+mkdir -p "$OUTPUT_DIR"
 
-echo "Project ID: $PROJECT_ID"
-echo "Saving output to: $OUTPUT_DIR"
-echo "-----------------------------------"
+echo "====================================="
+echo " GCP Inventory Collection Started"
+echo " Project ID : $PROJECT_ID"
+echo " Output Dir : $OUTPUT_DIR"
+echo "====================================="
 
-# ================================
-# 1. Compute Engine Instances
-# ================================
-echo "Collecting Compute Engine instance details..."
+# -----------------------------
+# 1. Compute Engine Inventory
+# -----------------------------
+echo "▶ Collecting Compute Engine VM details..."
 
 gcloud compute instances list \
+  --project="$PROJECT_ID" \
   --format="table(name,zone,machineType,status,internalIP,externalIP)" \
-  > $OUTPUT_DIR/compute_instances.txt
+  > "$OUTPUT_DIR/compute_instances.txt"
 
-echo "✔ Compute Engine details saved"
+echo "✔ Compute Engine inventory saved"
 
-# ================================
-# 2. Storage Bucket Details
-# ================================
-echo "Collecting Cloud Storage bucket details..."
+# -----------------------------
+# 2. Cloud Storage Inventory
+# -----------------------------
+echo "▶ Collecting Cloud Storage bucket details..."
 
-gsutil ls > $OUTPUT_DIR/storage_buckets.txt
+gsutil ls > "$OUTPUT_DIR/storage_buckets.txt"
 
-# Get bucket-level details
+# Clear details file before appending
+> "$OUTPUT_DIR/storage_bucket_details.txt"
+
 for bucket in $(gsutil ls); do
-  echo "Bucket: $bucket" >> $OUTPUT_DIR/storage_bucket_details.txt
-  gsutil ls -L $bucket >> $OUTPUT_DIR/storage_bucket_details.txt
-  echo "---------------------------------" >> $OUTPUT_DIR/storage_bucket_details.txt
+  {
+    echo "Bucket: $bucket"
+    gsutil ls -L "$bucket"
+    echo "--------------------------------------"
+  } >> "$OUTPUT_DIR/storage_bucket_details.txt"
 done
 
-echo "✔ Storage bucket details saved"
+echo "✔ Cloud Storage inventory saved"
 
-# ================================
-# 3. IAM Roles and Policies
-# ================================
-echo "Collecting IAM policy details..."
+# -----------------------------
+# 3. IAM Policy Inventory
+# -----------------------------
+echo "▶ Collecting IAM policy details..."
 
-gcloud projects get-iam-policy $PROJECT_ID \
-  --format=json > $OUTPUT_DIR/iam_policy.json
+gcloud projects get-iam-policy "$PROJECT_ID" \
+  --format=json \
+  > "$OUTPUT_DIR/iam_policy.json"
 
-echo "✔ IAM policy details saved"
+echo "✔ IAM policy inventory saved"
 
-# ================================
+# -----------------------------
 # Summary
-# ================================
-echo "-----------------------------------"
-echo "GCP Inventory Collection Completed"
-echo "Files generated:"
-ls -lh $OUTPUT_DIR
+# -----------------------------
+echo "====================================="
+echo " GCP Inventory Collection Completed"
+echo " Generated files:"
+ls -lh "$OUTPUT_DIR"
+echo "====================================="
