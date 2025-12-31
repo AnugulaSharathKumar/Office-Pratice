@@ -1,3 +1,3 @@
-project_id = "project-3e800f45-77e7-454a-a2b"
+project_id = "my-learning-terraform-482905"
 region     = "us-central1"
 zone       = "us-central1-a"
