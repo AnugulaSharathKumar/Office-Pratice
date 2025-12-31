@@ -1,1 +1,5 @@
-
+1. Step one checking the terraform is installed or not?
+    terraform version
+2. Setup Google Cloud Authentication
+    Required gcp sdk installation
+    gcloud auth application-default login
