@@ -1,6 +1,37 @@
 1. Step one checking the terraform is installed or not?
     If not run the terraform_installation.sh script
+    terraform version1. Step one checking the terraform is installed or not?
+    If not run the terraform_installation.sh script
     terraform version
+2. Setup Google Cloud Authentication
+    Required gcp sdk installation for this run the  Installing_gcpsdk.sh
+
+    If installed the command:
+    gcloud auth application-default login
+3. Check the versions:
+    terraform -v
+    gcloud version
+4. gcloud auth login
+    After run the command click on the link and copy the code and enter here
+5. Set up the project 
+     gcloud config set project my-learning-terraform-482905
+6. Verifying the projest list
+    gcloud config list
+7. API need to enable first place
+    gcloud services enable compute.googleapis.com
+8. Create Application Default Credentials (VERY IMPORTANT)
+    gcloud auth application-default login
+     
+9. Initialing the terraform   
+    terraform init
+10. Validating the Terraform file
+    terraform validate
+11. Running the terraform plan
+    terraform plan
+
+12. Applying the terraform script
+    terraform apply
+
 2. Setup Google Cloud Authentication
     Required gcp sdk installation for this run the  Installing_gcpsdk.sh
 
