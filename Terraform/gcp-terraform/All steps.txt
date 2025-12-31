@@ -2,5 +2,7 @@
     If not run the terraform_installation.sh script
     terraform version
 2. Setup Google Cloud Authentication
-    Required gcp sdk installation
+    Required gcp sdk installation for this run the  Installing_gcpsdk.sh
+
+    If installed the command:
     gcloud auth application-default login
