@@ -1,4 +1,5 @@
 1. Step one checking the terraform is installed or not?
+    If not run the terraform_installation.sh script
     terraform version
 2. Setup Google Cloud Authentication
     Required gcp sdk installation
